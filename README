@@ -1,0 +1,40 @@
+
+Module:      Process.pm 
+Version:     1.1
+Author:      Michael Schilli
+Date:        96/05/18
+
+Description: This Module helps controlling background processes.
+             Either shell processes or perl subroutines can be started
+             in background, polled if they're still running, and
+             killed or notified by a unix signal.
+
+Logic:       
+             use Process;
+             $myproc = Process->new();
+
+             $myproc->start("sleep 10");           # Shell process
+         OR
+             $myproc->start(sub { sleep 10; });    # Perl Sub
+
+             print "alive!\n" if $myproc->poll();
+
+             $myproc->kill();
+
+
+Manpages:    Embedded in Process.pm as usual:
+
+             pod2man Process.pm | nroff -man | more
+
+
+Installation:
+
+	perl Makefile.PL
+	make 
+	make test
+	make install
+
+
+Have fun!
+
+Michael Schilli schilli@tep.e-technik.tu-muenchen.de
