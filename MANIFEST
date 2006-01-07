@@ -11,6 +11,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Process.pm
+lib/Process/Backgroundable.pm
 lib/Process/Infinite.pm
 lib/Process/Launcher.pm
 lib/Process/Storable.pm
@@ -22,4 +23,5 @@ README
 t/01_compile.t
 t/02_main.t
 t/99_pod.t
+t/lib/MyBackgroundProcess.pm
 t/lib/MySimpleProcess.pm
