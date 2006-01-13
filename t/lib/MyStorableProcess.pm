@@ -1,7 +1,8 @@
-package MySimpleProcess;
+package MyStorableProcess;
 
 use strict;
-use base 'Process';
+use base 'Process::Storable',
+         'Process';
 
 use vars qw{$VERSION};
 BEGIN {
@@ -23,6 +24,9 @@ sub prepare {
 
 sub run {
 	my $self = shift;
+	foreach my $key ( sort keys %$self ) {
+		print STDERR "$key=$self->{$key}\n";
+	}
 	unless ( $self->{run} ) {
 		$self->{run} = 1;
 	}

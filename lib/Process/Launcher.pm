@@ -2,12 +2,18 @@ package Process::Launcher;
 
 use strict;
 use base 'Exporter';
+use Process ();
+use Process::Serializable ();
 use Params::Util qw{_CLASS _INSTANCE};
 
 use vars qw{$VERSION @EXPORT};
 BEGIN {
-	$VERSION = '0.03';
+	$VERSION = '0.10';
 	@EXPORT  = qw{run run3 storable};
+
+	# Preload the heavyish Process::Storable module
+	# (if prefork is available)
+	eval "use prefork 'Process::Storable';";
 }
 
 
@@ -19,9 +25,14 @@ BEGIN {
 
 sub run() {
 	my $class  = load(shift @ARGV);
+
+	# Create the object
 	my $object = $class->new( @ARGV )
 		or fail("$class->new returned false");
+
+	# Run it
 	execute($object);
+
 	exit(0);
 }
 
@@ -52,26 +63,28 @@ sub run3() {
 	# Run it
 	execute($object);
 
-	exit(0);	
+	exit(0);
 }
 
 sub storable() {
-	# Load the Storable object from STDIN
-	require Storable;
-	my $object = Storable::fd_retrieve(\*STDIN);
-	my $class  = load(ref($object));
-	unless ( _INSTANCE($object, 'Process') ) {
-		fail("$class object is not a Process object");
-	}
-	unless ( _INSTANCE($object, 'Process::Storable') ) {
-		fail("$class object is not a Process::Storable object");
+	my $class = load(shift @ARGV);
+	unless ( $class->isa('Process::Storable') ) {
+		fail("$class is not a Process::Storable subclass");
 	}
 
-	# Execute the object
+	# Deserialize the object
+	# (via a buffer to prevent some weird bug)
+	my $buffer = do { local $/; <STDIN> };
+	my $object = $class->deserialize( \$buffer );
+	unless ( $object ) {
+		fail("Failed to deserialize STDIN to a $class");
+	}
+
+	# Run it
 	execute($object);
 
 	# Return the object after execution
-	Storable::nstore_fd( $object, \*STDOUT );
+	$object->serialize(\*STDOUT);
 
 	exit(0);
 }
@@ -140,13 +153,30 @@ Process::Launcher - Execute Process objects from the command line
   perl -MProcess::Launcher -e run3 MyProcessClass
   
   # Thaw via Storable from STDIN, and freeze back after to STDOUT
-  perl -MProcess::Launcher -e storable
+  perl -MProcess::Launcher -e storable MyProcessClass
 
 =head1 DESCRIPTION
 
 The C<Process::Launcher> module provides a mechanism for launching
 and running a L<Process>-compatible object from the command line,
 and returning the results.
+
+=head2 Example Uses Cases
+
+Most use cases involve isolation. By having a C<Process> object run
+inside its own interpreter, it is then free do things such as loading
+in vast amounts of data and modules without bloating out the main
+process.
+
+It could provide a novel way of giving Out Of Memory (OOM) protection
+to your Perl process, because when the operating system's OOM-killer
+takes out the large (or runaway) process, the main program is left
+intact.
+
+It provides a way to run some piece of code in a different Perl
+environment than your own. This could mean a different Perl version,
+or running something with tainting on without needing the main process
+to have tainting.
 
 =head1 FUNCTIONS
 
@@ -193,21 +223,20 @@ C<run> above, including output.
 
 The C<storable> function is more robust and thorough again.
 
-It reads data from C<STDIN> and then thaws that via L<Storable>.
-
-The data is expected to thaw to an already-constructed L<Process>
-object that is also a L<Process::Storable>.
+It takes the name of a L<Process::Storable> subclass as it's param,
+reads data in from C<STDIN>, then calls the C<deserizlize> method
+for the class to get the L<Process> object.
 
 This object has C<prepare> and then C<run> called on it.
 
 The same C<OK> or C<FAIL> line will be written as above, but after
-that first line, the completed object will be frozen via
-the C<Storable::nstore_fd> function and written to C<STDOUT> as
-well.
+that first line, the completed object will be frozen back out
+via C<serialize> and written to C<STDOUT> as well.
 
-The intent is that you create your process in your main process,
-and then hand it off to another Perl instance for execution, and
-then optionally return it to handle the results.
+The intent is that you create your C<Process::Storable> object in
+your main interpreter thread, then hand it off to another Perl
+instance for execution, and then optionally return it to handle
+the results.
 
 =head1 SUPPORT
 

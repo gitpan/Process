@@ -1,14 +1,110 @@
 package Process::Storable;
 
-# Process that is compatible with Storable after new, and after run.
+# Storable-based implementation of Process::Serializable
 
 use 5.005;
 use strict;
-use Storable ();
+use base 'Process::Serializable';
+use Storable     ();
+use IO::Handle   ();
+use IO::String   ();
+use Scalar::Util ();
+use Params::Util '_INSTANCE';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.03';
+	$VERSION = '0.10';
+
+	# Hack IO::String to be a real IO::Handle
+	unless ( @IO::String::ISA ) {
+		@IO::String::ISA = qw{IO::Handle IO::Seekable};
+	}
+}
+
+sub serialize {
+	my $self = shift;
+
+	# Serialize to a named file (locking it)
+	if ( defined $_[0] and ! ref $_[0] and length $_[0] ) {
+		return Storable::lock_nstore($self, shift);
+	}
+
+	# Serialize to a string (via a handle)
+	if ( Params::Util::_SCALAR0($_[0]) ) {
+		my $string = shift;
+		$$string   = 'pst0' . Storable::nfreeze($self);
+		return 1;
+	}
+
+	# Serialize to a generic handle
+	if ( fileno($_[0]) ) {
+		local $/ = undef;
+		return Storable::nstore_fd($self, shift);
+	}
+
+	# Serialize to an IO::Handle object
+	if ( Params::Util::_INSTANCE($_[0], 'IO::Handle') ) {
+		my $string   = Storable::nfreeze($self);
+		my $iohandle = shift;
+		$iohandle->print( 'pst0' )  or return undef;
+		$iohandle->print( $string ) or return undef;
+		return 1;
+	}
+
+	# We don't support anything else
+	undef;
+}
+
+sub deserialize {
+	my $class = shift;
+	my $self  = $class->_deserialize(@_);
+
+	# Integrity check
+	_INSTANCE($self, $class) or return undef;
+
+	$self;
+}
+
+sub _deserialize {
+	my $class = shift;
+
+	# Serialize from a named file (locking it)
+	if ( defined $_[0] and ! ref $_[0] and length $_[0] ) {
+		return Storable::lock_retrieve(shift);
+	}
+
+	# Serialize from a string (via a handle)
+	if ( Params::Util::_SCALAR0($_[0]) ) {
+		my $string = shift;
+
+		# Remove the magic header if it exists
+		if ( substr($$string, 0, 4) eq 'pst0' ) {
+			substr($$string, 0, 4, '');
+		}
+
+		return Storable::thaw($$string);
+	}
+
+	# Serialize from a generic handle
+	if ( fileno($_[0]) ) {
+		return Storable::retrieve_fd(shift);
+	}
+
+	# Serialize from an IO::Handle object
+	if ( Params::Util::_INSTANCE($_[0], 'IO::Handle') ) {
+		local $/   = undef;
+		my $string = $_[0]->getline;
+
+		# Remove the magic header if it exists
+		if ( substr($string, 0, 4) eq 'pst0' ) {
+			substr($string, 0, 4, '');
+		}
+
+		return Storable::thaw($string);
+	}
+
+	# We don't support anything else
+	undef;
 }
 
 1;
@@ -19,44 +115,40 @@ __END__
 
 =head1 NAME
 
-Process::Storable - Process object that is compatible with Storable
+Process::Storable - Storable-based implementation of Process::Serializable
 
 =head1 SYNOPSIS
 
-  packate MyStorableProcess;
+Create your package...
+
+  package MyStorable;
   
-  use base 'Process::Storable',
-           'Process';
+  use base qw{Process::Storable Process};
   
-  sub prepare {
-      ...
-  }
-  
-  sub run {
-      ...
-  }
+  sub prepare { ... }
+  sub run     { ... }
   
   1;
 
+And then use it...
+
+  use MyStorable;
+  
+  my $process = MyStorable->new( ... );
+  $process->serialize( 'filename.dat' );
+  
+  # and so on...
+
 =head1 DESCRIPTION
 
-C<Process::Storable> provides the base for objects that can be
-stored, or transported from place to place. It is not itself a
-subclass of L<Process> so you will need to inherit from both.
+C<Process::Storable> provides an implementation of the
+L<Process::Serializable> role using the standard L<Storable> module
+from the Perl core. It is not itself a subclass of L<Process> so you
+will need to inherit from both L<Process> (or a subclass) and
+L<Process::Storable> if you want to make use of it.
 
 Objects that inherit from C<Process::Storable> must follow the C<new>,
-C<prepare>, C<run> rules much more strictly.
-
-All platform-specific resource checking and binding must be done in
-C<prepare>, so that after C<new> (but before C<prepare>) the object
-can be stored via L<Storable> and later thawed, C<prepare>'ed and
-C<run>, then stored via C<Storable> again after completion.
-
-C<Process::Storable> is subclass (for now) of L<Process>.
-
-=head1 METHODS
-
-There is no change from the base C<Process> class.
+C<prepare>, C<run> rules of L<Process::Serializable>.
 
 =head1 SUPPORT
 

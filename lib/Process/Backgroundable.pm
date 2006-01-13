@@ -2,13 +2,13 @@ package Process::Backgroundable;
 
 use strict;
 use base 'Process::Storable';
-use File::Temp ();
 use Storable   ();
+use File::Temp ();
 use IPC::Run3  ();
 
 use vars qw{$VERSION @PERLCMD};
 BEGIN {
-	$VERSION = '0.03';
+	$VERSION = '0.10';
 
 	# Contains the command to use to launch perl
 	# Should be the path to the perl current running.
@@ -22,11 +22,11 @@ sub background {
 
 	# Dump the object to the input filehandle
 	my $stdin = File::Temp::tempfile();
-	Storable::nstore_fd( $self, $stdin );
+	$self->serialize( $stdin );
 	seek( $stdin, 0, 0 );
 
 	# Generate the command
-	my $cmd = [ @PERLCMD, '-MProcess::Launcher', '-e storable' ];
+	my $cmd = [ @PERLCMD, '-MProcess::Launcher', '-e storable', ref($self) ];
 
 	# Fire the command
 	IPC::Run3::run3( $cmd, $stdin, \undef, \undef );
@@ -42,7 +42,7 @@ __END__
 
 =head1 NAME
 
-Process::Backgroundable - A Process object that is to be backgrounded
+Process::Backgroundable - A Process::Storable object that can be backgrounded
 
 =head1 SYNOPSIS
 
@@ -68,8 +68,8 @@ no way to recieve any output from the background process, and you will
 not be notified if it exits.
 
 If you want to add logging or locks or some other feature to your
-backgrounded process, that is your responsibility, and you should do
-so in the C<prepare> method.
+backgrounded process, that is your responsibility, and you set them up
+in the C<prepare> method.
 
 =head1 METHODS
 
@@ -89,9 +89,8 @@ forking.
 
 =head1 BUGS
 
-This is implemented with &-ending L<IPC::Run3> calls for now, but
-we might have to move to L<Proc::Background> for more robustness
-later on.
+This is implemented with L<IPC::Run3> calls for now, but we might have
+to move to L<Proc::Background> for more robustness later on.
 
 =head1 SUPPORT
 

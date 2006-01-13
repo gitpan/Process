@@ -14,6 +14,7 @@ lib/Process.pm
 lib/Process/Backgroundable.pm
 lib/Process/Infinite.pm
 lib/Process/Launcher.pm
+lib/Process/Serializable.pm
 lib/Process/Storable.pm
 LICENSE
 Makefile.PL
@@ -22,6 +23,10 @@ META.yml
 README
 t/01_compile.t
 t/02_main.t
+t/03_storable.t
+t/04_launcher.t
+t/05_backgroundable.t
 t/99_pod.t
 t/lib/MyBackgroundProcess.pm
 t/lib/MySimpleProcess.pm
+t/lib/MyStorableProcess.pm
