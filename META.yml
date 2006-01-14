@@ -21,4 +21,4 @@ requires:
   Scalar::Util: 1.17
   Storable: 2.14
   perl: 5.005
-version: 0.10
+version: 0.11
