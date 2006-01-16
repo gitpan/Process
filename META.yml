@@ -17,8 +17,8 @@ requires:
   IO::File: 0
   IO::Handle: 0
   IPC::Run3: 0.034
-  Params::Util: 0.07
+  Params::Util: 0.10
   Scalar::Util: 1.17
   Storable: 2.14
   perl: 5.005
-version: 0.11
+version: 0.12

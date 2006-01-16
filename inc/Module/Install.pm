@@ -1,4 +1,4 @@
-#line 1 "/tmp/cpan2/Process/inc/Module/Install.pm - /usr/local/share/perl/5.8.4/Module/Install.pm"
+#line 1 "/tmp/pita/Process/inc/Module/Install.pm - /usr/local/share/perl/5.8.4/Module/Install.pm"
 package Module::Install;
 
 use 5.004;

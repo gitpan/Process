@@ -14,6 +14,7 @@ lib/Process.pm
 lib/Process/Backgroundable.pm
 lib/Process/Infinite.pm
 lib/Process/Launcher.pm
+lib/Process/Packageable.pm
 lib/Process/Serializable.pm
 lib/Process/Storable.pm
 LICENSE
