@@ -13,7 +13,7 @@ use Params::Util '_INSTANCE';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.12';
+	$VERSION = '0.13';
 
 	# Hack IO::String to be a real IO::Handle
 	unless ( IO::String->isa('IO::Handle') ) {
@@ -37,7 +37,7 @@ sub serialize {
 	}
 
 	# Serialize to a generic handle
-	if ( fileno($_[0]) ) {
+	if ( defined fileno($_[0]) ) {
 		local $/ = undef;
 		return Storable::nstore_fd($self, shift);
 	}
@@ -86,7 +86,7 @@ sub _deserialize {
 	}
 
 	# Serialize from a generic handle
-	if ( fileno($_[0]) ) {
+	if ( defined fileno($_[0]) ) {
 		return Storable::retrieve_fd(shift);
 	}
 

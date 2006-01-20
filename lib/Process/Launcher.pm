@@ -8,8 +8,8 @@ use Params::Util qw{_CLASS _INSTANCE};
 
 use vars qw{$VERSION @EXPORT};
 BEGIN {
-	$VERSION = '0.12';
-	@EXPORT  = qw{run run3 storable};
+	$VERSION = '0.13';
+	@EXPORT  = qw{run run3 serialized};
 
 	# Preload the heavyish Process::Storable module
 	# (if prefork is available)
@@ -66,16 +66,14 @@ sub run3() {
 	exit(0);
 }
 
-sub storable() {
+sub serialized() {
 	my $class = load(shift @ARGV);
-	unless ( $class->isa('Process::Storable') ) {
-		fail("$class is not a Process::Storable subclass");
+	unless ( $class->isa('Process::Serializable') ) {
+		fail("$class is not a Process::Serializable subclass");
 	}
 
 	# Deserialize the object
-	# (via a buffer to prevent some weird bug)
-	my $buffer = do { local $/; <STDIN> };
-	my $object = $class->deserialize( \$buffer );
+	my $object = $class->deserialize( \*STDIN );
 	unless ( $object ) {
 		fail("Failed to deserialize STDIN to a $class");
 	}
@@ -88,8 +86,6 @@ sub storable() {
 
 	exit(0);
 }
-
-
 
 
 
@@ -154,6 +150,10 @@ Process::Launcher - Execute Process objects from the command line
   
   # Thaw via Storable from STDIN, and freeze back after to STDOUT
   perl -MProcess::Launcher -e storable MyProcessClass
+  
+  # Requires Process::YAML to be installed:
+  # Thaw via YAML::Syck from STDIN, and freeze back after to STDOUT
+  perl -MProcess::Launcher -e yaml MyProcessClass
 
 =head1 DESCRIPTION
 
@@ -161,7 +161,7 @@ The C<Process::Launcher> module provides a mechanism for launching
 and running a L<Process>-compatible object from the command line,
 and returning the results.
 
-=head2 Example Uses Cases
+=head2 Example Use Cases
 
 Most use cases involve isolation. By having a C<Process> object run
 inside its own interpreter, it is then free do things such as loading
@@ -219,13 +219,13 @@ At the end of the input, the key/value pairs are passed to the
 constructor, and from there the function behaves identically to
 C<run> above, including output.
 
-=head2 storable
+=head2 serialized
 
-The C<storable> function is more robust and thorough again.
+The C<serialized> function is more robust and thorough again.
 
-It takes the name of a L<Process::Storable> subclass as it's param,
-reads data in from C<STDIN>, then calls the C<deserizlize> method
-for the class to get the L<Process> object.
+It takes the name of a L<Process::Serializable> subclass as its
+parameter, reads data in from C<STDIN>, then calls the
+C<deserialize> method for the class to get the L<Process> object.
 
 This object has C<prepare> and then C<run> called on it.
 
@@ -233,9 +233,9 @@ The same C<OK> or C<FAIL> line will be written as above, but after
 that first line, the completed object will be frozen back out
 via C<serialize> and written to C<STDOUT> as well.
 
-The intent is that you create your C<Process::Storable> object in
-your main interpreter thread, then hand it off to another Perl
-instance for execution, and then optionally return it to handle
+The intent is that you create your object of the C<Process::Serializable>
+subcless in your main interpreter thread, then hand it off to another
+Perl instance for execution, and then optionally return it to handle
 the results.
 
 =head1 SUPPORT

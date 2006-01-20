@@ -5,7 +5,7 @@ use strict;
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.12';
+	$VERSION = '0.13';
 }
 
 # sample implementation for dependencies method
@@ -78,7 +78,7 @@ object's dependencies.
 
 Inheriting from C<Process::Packageable> in a C<Process> subclass, you
 agree to implement the C<dependencies> method as documented below.
-A sample C<dependency> method which just requires a minimum perl
+A sample C<dependencies> method which just requires a minimum perl
 version (5.005) is implemented by C<Process::Packageable>.
 
 In addition, you need to make sure that any dependencies of your

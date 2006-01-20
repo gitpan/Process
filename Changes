@@ -1,5 +1,13 @@
 Revision history for Perl extension Process
 
+0.13 Tue 17 Jan 2006
+	- Added 'yaml' to Process::Loader (Steffen Müller)
+	- Added tests for 'yaml' which are skipped without Process::YAML (Steffen Müller)
+	- Fixed spelling errors in Process::Packageable (Steffen Müller)
+	- Converted 'storable' and 'yaml' to one unified 'serialized' (Steffen Müller)
+	- Fixed bug with STDIN (Steffen Müller)
+	- Upgraded ::Backgroundable to use serialized (Steffen Müller)
+
 0.12 Tue 17 Jan 2006
 	- Added Process::Packageable (Steffen Müller)
 

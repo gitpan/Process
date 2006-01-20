@@ -92,9 +92,8 @@ SCOPE: {
 
 
 
-
 #####################################################################
-# Test the Process::Launcher 'storable' command
+# Test the Process::Launcher 'serialized' command with Storable
 
 use Storable ();
 ok( MyStorableProcess->isa('Process::Storable'),
@@ -106,14 +105,14 @@ SCOPE: {
 	isa_ok( $object, 'Process'           );
 
 	# Get the Storablised version
-	my @cmd = ( @base_cmd, '-e storable', 'MyStorableProcess' );
+	my @cmd = ( @base_cmd, '-e serialized', 'MyStorableProcess' );
 	my $inp = File::Temp::tempfile();
 	my $out = File::Temp::tempfile();
 	ok( $object->serialize( $inp ), '->serialize returns ok' );
 	ok( seek( $inp, 0, 0 ), 'Seeked on tempfile for input' );
 
 	my $err = '';
-	ok( IPC::Run3::run3( \@cmd, $inp, $out, \$err ), 'storable returns true' );
+	ok( IPC::Run3::run3( \@cmd, $inp, $out, \$err ), 'serialized returns true' );
 	is( $err, "foo3=bar3\nprepare=1\n", "STDERR gets expected output" );
 	ok( seek( $out, 0, 0 ), 'seeked STDOUT to 0' );
 	my $header = <$out>;
@@ -132,3 +131,4 @@ SCOPE: {
 			'Returned object matches expected' );
 	}
 }
+

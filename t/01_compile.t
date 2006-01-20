@@ -38,9 +38,9 @@ is( $Process::VERSION, $Process::Launcher::VERSION,       '::Process == ::Launch
 is( $Process::VERSION, $Process::Backgroundable::VERSION, '::Process == ::Backgroundable' );
 
 # Does the launcher export the appropriate things
-ok( defined(&run),      'Process::Launcher exports &run'      );
-ok( defined(&run3),     'Process::Launcher exports &run3'     );
-ok( defined(&storable), 'Process::Launcher exports &storable' );
+ok( defined(&run),        'Process::Launcher exports &run'        );
+ok( defined(&run3),       'Process::Launcher exports &run3'       );
+ok( defined(&serialized), 'Process::Launcher exports &serialized' );
 
 # Include the testing modules
 use_ok( 'MySimpleProcess'     );
