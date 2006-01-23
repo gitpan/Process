@@ -5,7 +5,7 @@ no_index:
     - t
 generated_by: Module::Install version 0.54
 distribution_type: module
-version: 0.14
+version: 0.15
 name: Process
 author: Adam Kennedy <cpan@ali.as>, L<http://ali.as/>
 license: perl
@@ -16,6 +16,7 @@ build_requires:
 requires: 
   Scalar::Util: 1.17
   IO::File: 0
+  IO::String: 0
   IO::Handle: 0
   Storable: 2.14
   perl: 5.005

@@ -4,6 +4,7 @@ name           'Process';
 all_from       'lib/Process.pm';
 requires       'IO::Handle'   => 0;
 requires       'IO::File'     => 0;
+requires       'IO::String'   => 0;
 requires       'Storable'     => '2.14';
 requires       'Scalar::Util' => '1.17';
 requires       'Params::Util' => '0.10';
