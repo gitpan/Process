@@ -12,6 +12,7 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Process.pm
 lib/Process/Backgroundable.pm
+lib/Process/Delegatable.pm
 lib/Process/Infinite.pm
 lib/Process/Launcher.pm
 lib/Process/Packageable.pm

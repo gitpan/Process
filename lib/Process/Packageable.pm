@@ -5,7 +5,7 @@ use strict;
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.13';
+	$VERSION = '0.14';
 }
 
 # sample implementation for dependencies method

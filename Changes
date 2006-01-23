@@ -1,5 +1,9 @@
 Revision history for Perl extension Process
 
+0.14 Mon 23 Jan 2006
+	- Adding Process::Delegatable.
+	  Currently untested except for the normal compile test
+
 0.13 Tue 17 Jan 2006
 	- Added 'yaml' to Process::Loader (Steffen Müller)
 	- Added tests for 'yaml' which are skipped without Process::YAML (Steffen Müller)

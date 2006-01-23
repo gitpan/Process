@@ -19,7 +19,7 @@ BEGIN {
 }
 
 use lib catdir('t', 'lib');
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 BEGIN {
 	ok( $] > 5.005, 'Perl version is 5.005 or newer' );
@@ -28,6 +28,7 @@ BEGIN {
 	use_ok( 'Process::Serializable'   );
 	use_ok( 'Process::Storable'       );
 	use_ok( 'Process::Backgroundable' );
+	use_ok( 'Process::Delegatable'    );
 	use_ok( 'Process::Launcher'       );
 }
 
@@ -36,6 +37,7 @@ is( $Process::VERSION, $Process::Serializable::VERSION,   '::Process == ::Serial
 is( $Process::VERSION, $Process::Storable::VERSION,       '::Process == ::Storable'       );
 is( $Process::VERSION, $Process::Launcher::VERSION,       '::Process == ::Launcher'       );
 is( $Process::VERSION, $Process::Backgroundable::VERSION, '::Process == ::Backgroundable' );
+is( $Process::VERSION, $Process::Delegatable::VERSION,    '::Process == ::Delegatable'    );
 
 # Does the launcher export the appropriate things
 ok( defined(&run),        'Process::Launcher exports &run'        );
