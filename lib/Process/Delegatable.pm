@@ -8,7 +8,7 @@ use IPC::Run3  ();
 
 use vars qw{$VERSION @PERLCMD};
 BEGIN {
-	$VERSION = '0.15';
+	$VERSION = '0.16';
 
 	# Contains the command to use to launch perl
 	# Should be the path to the perl current running.
@@ -35,12 +35,26 @@ sub delegate {
 	# Fire the command
 	IPC::Run3::run3( $cmd, $stdin, $stdout, \undef );
 
-	# Deserialize the object and overwrite
+	# Get the first line of the response, which will be an OK/FAIL
 	seek( $stdout, 0, 0 );
-	my $complete = $class->deserialize( $stdout );
-	%$self = %$complete;
+	my $result = <$stdout>;
+	chomp $result;
+	if ( $result eq 'OK' ) {
+		# Looks good, deserialize the data
+		my $complete = $class->deserialize( $stdout );
+		%$self = %$complete;
+		return 1;
+	}
 
-	1;
+	# Is it an error?
+	if ( $result =~ s/^FAIL// ) {
+		# Failed
+		$self->{errstr} = $result;
+		return 1;
+	}
+
+	# err...
+	die "Unknown delegate response $result";
 }
 
 1;

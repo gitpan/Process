@@ -19,7 +19,7 @@ BEGIN {
 }
 
 use lib catdir('t', 'lib');
-use Test::More tests => 20;
+use Test::More tests => 21;
 
 BEGIN {
 	ok( $] > 5.005, 'Perl version is 5.005 or newer' );
@@ -45,8 +45,9 @@ ok( defined(&run3),       'Process::Launcher exports &run3'       );
 ok( defined(&serialized), 'Process::Launcher exports &serialized' );
 
 # Include the testing modules
-use_ok( 'MySimpleProcess'     );
-use_ok( 'MyStorableProcess'   );
-use_ok( 'MyBackgroundProcess' );
+use_ok( 'MySimpleProcess'      );
+use_ok( 'MyStorableProcess'    );
+use_ok( 'MyBackgroundProcess'  );
+use_ok( 'MyDelegatableProcess' );
 
 exit(0);

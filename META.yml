@@ -3,9 +3,9 @@ no_index:
   directory: 
     - inc
     - t
-generated_by: Module::Install version 0.54
+generated_by: Module::Install version 0.55
 distribution_type: module
-version: 0.15
+version: 0.16
 name: Process
 author: Adam Kennedy <cpan@ali.as>, L<http://ali.as/>
 license: perl

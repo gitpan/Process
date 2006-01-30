@@ -8,7 +8,7 @@ use Params::Util qw{_CLASS _INSTANCE};
 
 use vars qw{$VERSION @EXPORT};
 BEGIN {
-	$VERSION = '0.15';
+	$VERSION = '0.16';
 	@EXPORT  = qw{run run3 serialized};
 
 	# Preload the heavyish Process::Storable module
@@ -100,14 +100,18 @@ sub execute($) {
 		my $pid = fork();
 		exit(0) if $pid;
 	}
-	unless ( $object->prepare ) {
-		fail("$class->prepare returned false");
-	}
-	unless ( $object->run ) {
-		fail("$class->run returned false");
-	}
+
+	# Prepare the Process
+	my $rv = eval { $object->prepare };
+	fail("$class->prepare died: $@")       if $@;
+	fail("$class->prepare returned false") unless $rv;
+
+	# Run the process
+	$rv = eval { $object->run };
+	fail("$class->run died: $@")       if $@;
+	fail("$class->run returned false") unless $rv;
+
 	print "OK\n";
-	1;
 }
 
 sub load($) {

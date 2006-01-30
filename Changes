@@ -1,5 +1,9 @@
 Revision history for Perl extension Process
 
+0.16 Tue 31 Jan 2006
+	- Adding proper tests for Process::Delegatable
+	- Foritfying Process::Launcher against things that die
+
 0.15 Mon 23 Jan 2006
 	- Adding IO::String dependency to Makefile.PL
 
