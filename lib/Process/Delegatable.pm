@@ -8,7 +8,7 @@ use IPC::Run3  ();
 
 use vars qw{$VERSION @PERLCMD};
 BEGIN {
-	$VERSION = '0.16';
+	$VERSION = '0.17';
 
 	# Contains the command to use to launch perl
 	# Should be the path to the perl current running.
@@ -105,7 +105,7 @@ The C<delegate> method is provided by default, and will start another
 instance of another Perl (or if no arguments, the same Perl you are
 current running), although not necesarily with the same environment.
 
-This allows you to use C<Process::Isolated> to run Processes that may
+This allows you to use C<Process::Delegatable> to run Processes that may
 need to allocate a large amount of memory, or need to be rigourously
 seperated from your main program.
 

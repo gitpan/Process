@@ -1,5 +1,9 @@
 Revision history for Perl extension Process
 
+0.17 Sat 26 Feb 2006
+	- No functional changes.
+	- Resolved #17402: Documentation bug in Process::Delegatable
+
 0.16 Tue 31 Jan 2006
 	- Adding proper tests for Process::Delegatable
 	- Foritfying Process::Launcher against things that die

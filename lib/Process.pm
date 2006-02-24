@@ -7,7 +7,7 @@ use strict;
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.16';
+	$VERSION = '0.17';
 }
 
 sub new     { bless {}, shift }
