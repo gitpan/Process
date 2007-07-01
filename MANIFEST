@@ -8,7 +8,6 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Process.pm
-lib/Process/Backgroundable.pm
 lib/Process/Delegatable.pm
 lib/Process/Infinite.pm
 lib/Process/Launcher.pm
@@ -24,10 +23,8 @@ t/01_compile.t
 t/02_main.t
 t/03_storable.t
 t/04_launcher.t
-t/05_backgroundable.t
 t/06_delegatable.t
 t/99_author.t
-t/lib/MyBackgroundProcess.pm
 t/lib/MyDelegatableProcess.pm
 t/lib/MySimpleProcess.pm
 t/lib/MyStorableProcess.pm
