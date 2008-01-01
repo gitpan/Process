@@ -1,12 +1,13 @@
 --- 
 abstract: Objects that represent generic computational processes
-author: Adam Kennedy <adamk@cpan.org>, L<http://ali.as/>
+author: 
+  - Adam Kennedy <adamk@cpan.org>, L<http://ali.as/>
 build_requires: 
   File::Remove: 0.34
   File::Spec: 0.80
   Test::More: 0.47
 distribution_type: module
-generated_by: Module::Install version 0.67
+generated_by: Module::Install version 0.68
 license: perl
 meta-spec: 
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
@@ -23,7 +24,8 @@ requires:
   IO::String: 0
   IPC::Run3: 0.034
   Params::Util: 0.10
+  Perl::Exe: 0.01
   Scalar::Util: 1.17
   Storable: 2.14
   perl: 5.005
-version: 0.20
+version: 0.21
