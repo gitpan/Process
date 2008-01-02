@@ -24,8 +24,8 @@ requires:
   IO::String: 0
   IPC::Run3: 0.034
   Params::Util: 0.10
-  Perl::Exe: 0.01
+  Probe::Perl: 0.01
   Scalar::Util: 1.17
   Storable: 2.14
   perl: 5.005
-version: 0.21
+version: 0.22
