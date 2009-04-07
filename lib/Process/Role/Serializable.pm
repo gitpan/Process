@@ -1,13 +1,11 @@
-package Process::Serializable;
+package Process::Role::Serializable;
 
 use 5.00503;
 use strict;
-use Process::Role::Serializable ();
 
-use vars qw{$VERSION @ISA};
+use vars qw{$VERSION};
 BEGIN {
 	$VERSION = '0.23';
-	@ISA     = 'Process::Role::Serializable';	
 }
 
 1;
@@ -18,7 +16,7 @@ __END__
 
 =head1 NAME
 
-Process::Serializable - Indicates that a Process can be frozen to a string
+Process::Role::Serializable - Indicates that a Process can be frozen to a string
 
 =head1 SYNOPSIS
 
@@ -42,7 +40,7 @@ Process::Serializable - Indicates that a Process can be frozen to a string
 
 =head1 DESCRIPTION
 
-C<Process::Serializable> provides a role (an additional interface and set
+C<Process::Role::Serializable> provides a role (an additional interface and set
 of rules) that allow for L<Process> objects to be converted to be "frozen"
 to a string, moved around, and then be "thawed" back into an object again.
 
@@ -55,7 +53,7 @@ No default implementations of the two methods are provided for you.
 
 =head2 When a Process can be Serialized
 
-The C<Process::Serializable> API dictates 4 specific conditions at which
+The C<Process::Role::Serializable> API dictates 4 specific conditions at which
 your object must be serializable. This means you shouldn't be connected
 to any database, have no locked files, and so on. You should have cleaned
 up any weird things and be self-contained again.

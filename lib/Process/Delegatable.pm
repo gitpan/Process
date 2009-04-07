@@ -1,15 +1,17 @@
 package Process::Delegatable;
 
+use 5.00503;
 use strict;
-use base 'Process::Storable';
-use Storable    ();
-use File::Temp  ();
-use IPC::Run3   ();
-use Probe::Perl ();
+use File::Temp        ();
+use IPC::Run3         ();
+use Probe::Perl       ();
+use Storable          ();
+use Process::Storable ();
 
-use vars qw{$VERSION @PERLCMD};
+use vars qw{$VERSION @ISA @PERLCMD};
 BEGIN {
-	$VERSION = '0.22';
+	$VERSION = '0.23';
+	@ISA     = 'Process::Storable';
 
 	# Contains the command to use to launch perl
 	# Should be the path to the perl current running.
@@ -36,10 +38,15 @@ sub delegate {
 	# Fire the command
 	IPC::Run3::run3( $cmd, $stdin, $stdout, \undef );
 
-	# Get the first line of the response, which will be an OK/FAIL
+	# Get the first line with content of the response, which will be an OK/FAIL
 	seek( $stdout, 0, 0 );
-	my $result = <$stdout>;
-	chomp $result;
+	my $result;
+	while ( 1 ) {
+		$result = <$stdout>;
+		next unless $result =~ /\S/;
+		chomp($result);
+		last;
+	}
 	if ( $result eq 'OK' ) {
 		# Looks good, deserialize the data
 		my $complete = $class->deserialize( $stdout );
@@ -120,11 +127,15 @@ For other issues, contact the author.
 
 =head1 AUTHOR
 
-Adam Kennedy E<lt>adamk@cpan.orgE<gt>, L<http://ali.as/>
+Adam Kennedy E<lt>adamk@cpan.orgE<gt>
+
+=head1 SEE ALSO
+
+L<http://ali.as/>
 
 =head1 COPYRIGHT
 
-Copyright 2006 Adam Kennedy.
+Copyright 2006 - 2009 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

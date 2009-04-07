@@ -12,8 +12,11 @@ lib/Process/Delegatable.pm
 lib/Process/Infinite.pm
 lib/Process/Launcher.pm
 lib/Process/Packageable.pm
+lib/Process/Probe.pm
+lib/Process/Role/Serializable.pm
 lib/Process/Serializable.pm
 lib/Process/Storable.pm
+lib/Process/YAML.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
@@ -24,6 +27,8 @@ t/02_main.t
 t/03_storable.t
 t/04_launcher.t
 t/06_delegatable.t
+t/07_probe.t
+t/97_meta.t
 t/98_pod.t
 t/99_pmv.t
 t/lib/MyDelegatableProcess.pm

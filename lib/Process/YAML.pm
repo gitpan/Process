@@ -2,7 +2,7 @@ package Process::Storable;
 
 use 5.00503;
 use strict;
-use Storable              ();
+use YAML::Tiny            ();
 use IO::Handle            ();
 use IO::String            ();
 use Scalar::Util          ();
