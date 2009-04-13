@@ -10,7 +10,7 @@ use Process::Storable ();
 
 use vars qw{$VERSION @ISA @PERLCMD};
 BEGIN {
-	$VERSION = '0.24';
+	$VERSION = '0.25';
 	@ISA     = 'Process::Storable';
 
 	# Contains the command to use to launch perl
@@ -43,6 +43,7 @@ sub delegate {
 	my $result;
 	while ( 1 ) {
 		$result = <$stdout>;
+		$result = "FAIL No output returned\n" unless defined $result;
 		next unless $result =~ /\S/;
 		chomp($result);
 		last;

@@ -38,4 +38,4 @@ resources:
   ChangeLog: http://fisheye2.atlassian.com/changelog/cpan/trunk/Process
   license: http://dev.perl.org/licenses/
   repository: http://svn.ali.as/cpan/trunk/Process
-version: 0.24
+version: 0.25
