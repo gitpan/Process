@@ -29,9 +29,9 @@ t/03_storable.t
 t/04_launcher.t
 t/06_delegatable.t
 t/07_probe.t
-t/97_meta.t
-t/98_pod.t
-t/99_pmv.t
 t/lib/MyDelegatableProcess.pm
 t/lib/MySimpleProcess.pm
 t/lib/MyStorableProcess.pm
+xt/meta.t
+xt/pmv.t
+xt/pod.t
