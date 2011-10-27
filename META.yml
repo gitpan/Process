@@ -4,7 +4,7 @@ author:
   - 'Adam Kennedy <adamk@cpan.org>'
 build_requires:
   ExtUtils::MakeMaker: 6.36
-  File::Remove: 1.40
+  File::Remove: 1.51
   File::Spec: 0.80
   Test::More: 0.47
 configure_requires:
@@ -40,4 +40,4 @@ resources:
   ChangeLog: http://fisheye2.atlassian.com/changelog/cpan/trunk/Process
   license: http://dev.perl.org/licenses/
   repository: http://svn.ali.as/cpan/trunk/Process
-version: 0.29
+version: 0.30
